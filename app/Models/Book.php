@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Book extends Model
+{
+    protected $fillable = [
+        'title',
+        'author',
+        'isbn',
+        'cover_url',
+    ];
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(related: User::class)->using(UserBook::class)->withTimestamps();
+    }
+}
