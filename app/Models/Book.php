@@ -16,6 +16,6 @@ class Book extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(related: User::class)->using(UserBook::class)->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_books')->withTimestamps();
     }
 }
