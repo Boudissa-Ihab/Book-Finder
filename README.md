@@ -1,59 +1,226 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Book Finder
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A REST API built with Laravel 12 that allows searching for books, managing favorites and import books from the Google Books API.
 
-## About Laravel
+## Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Introduction](#introduction)
+- [Requirements](#requirements)
+- [Installation & Setup](#installation--setup)
+- [Project Structure](#project-structure)
+- [API Endpoints](#api-endpoints)
+- [Features](#features)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Introduction
 
-## Learning Laravel
+**Book Finder** is a backend API designed to provide books management. Users can:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Register and authenticate** using email and password
+- **Search and browse** a collection of different books
+- **Manage favorites** by adding or removing books from collection
+- **Import books** from the Google Books API (Admin only)
+- **Access API documentation** via Swagger/OpenAPI
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Requirements
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### System Requirements
 
-### Premium Partners
+- **PHP**: > 8.2
+- **Composer**: Latest version
+- **Node.js**: > 18.0
+- **NPM**: > 9.0
+- **MySQL**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+>[!NOTE]
+> I personally used [Laravel Herd](https://herd.laravel.com/) to setup everything on my local environment (since you can enable multiple PHP versions and Node versions using NVM), and each local project will have a custom domain locally, something like `book-finder.test`
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Installation & Setup
 
-## Code of Conduct
+### 1. Clone the Repository
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+git clone https://github.com/Boudissa-Ihab/Book-Finder.git
+cd Book-Finder
+```
 
-## Security Vulnerabilities
+### 2. Install Dependencies
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+# Install PHP dependencies
+composer install
 
-## License
+# Install Node.js dependencies
+npm install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 3. Environment Configuration
+
+```bash
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+```
+
+Edit `.env` file and configure the following:
+- `APP_URL`: Application base URL (default: `http://localhost:8000`)
+- update your own `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD`
+- create a database in your DBMS with the same name as your .env `DB_DATABASE`
+- (optiona) personally, i changed `LOG_CHANNEL` to "daily" instead of "stack"
+
+### 4. Database Setup
+
+```bash
+# Run migrations
+php artisan migrate
+
+# Seed the database with sample data
+php artisan db:seed
+```
+
+### 5. Generate API Documentation
+
+```bash
+# Re-generate API documentation
+php artisan l5-swagger:generate
+```
+
+### 7. Start the Development Server
+
+```bash
+php artisan serve
+```
+
+The application will be available at `http://localhost:8000`
+
+---
+
+## Project Structure
+
+```
+Book-Finder/
+├── app/
+│   ├── Console/
+│   │   └── Commands/
+│   │   │   └── GenerateAdmin.php        # Generate an admin
+│   ├── Enums/
+│   │   └── Roles.php            # User roles enumeration
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Controller.php   # Base controller with OpenAPI configuration
+│   │   │   └── Api/
+│   │   │       ├── Auth/
+│   │   │       │   ├── LoginController.php
+│   │   │       │   └── RegistrationController.php
+│   │   │       └── Books/
+│   │   │           ├── BookController.php
+│   │   │           ├── FavoriteController.php
+│   │   │           └── GoogleApiController.php
+│   │   ├── Requests/
+│   │   │   └── Api
+│   │   │       ├── Auth        # Login & Register
+│   │   │       └── Books       # Favorite & Google API
+│   │   └── Resources/
+│   │   │   └── BookResource.php
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Book.php
+│   │   └── UserBook.php         # Pivot model for favorite books
+│   ├── Providers/   
+│   |   └── AppServiceProvider.php       # Defines API rate limit          
+│   ├── Services/
+│   │   ├── GoogleBookApiService.php
+│   │   ├── GoogleBookDto.php            # Data Transfer Object
+│   │   └── GoogleBookMapping.php        # Data mapping logic
+│   └── Swagger/
+│       └── Book.php             # Book schema definition
+├── bootstrap/
+│   └── app.php                  # Roles & Permissions middlewares
+├── database/
+│   ├── factories/
+│   │   ├── BookFactory.php 
+│   │   ├── UserBookFactory.php         
+│   │   └── UserFactory.php
+│   ├── migrations/
+│   └── seeders/
+├── routes/
+│   └── api.php                  # API routes with Sanctum
+└── storage/       
+    └── api-docs       
+        └── api-docs.json        # Generated API docs       
+```
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/register` | Register a new user |
+| POST | `/api/login` | Authenticate user and receive token |
+| POST | `/api/logout` | Invalidate user session |
+
+### Books
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/books` | Get all books | Required |
+| GET | `/api/favorites` | Get user favorite books | Required |
+| POST | `/api/favorites/{book_id}` | Add book to favorites | Required |
+| DELETE | `/api/favorites/{book_id}` | Remove book from favorites | Required |
+
+### Google Books (Admin Only)
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/google/books/view` | View Google Books raw data | Admin |
+| GET | `/api/google/books/search` | Search books on Google Books API | Admin |
+| POST | `/api/google/books/import` | Import books from Google Books | Admin |
+
+### Documentation
+
+| Endpoint | Description |
+|----------|-------------|
+| `/api/documentation` | Interactive Swagger UI for API documentation |
+
+---
+
+## Features
+
+✅ User Registration & Authentication  
+✅ Role-Based Access Control (RBAC)  
+✅ View books from the local DB
+✅ Favorite Books Management  
+✅ Google Books API Integration  
+✅ API Documentation (Swagger/OpenAPI)  
+✅ Database Seeding with Factories  
+✅ Error Handling & Validation  
+
+
+## Assumptions
+
+❓ `author` attribute was taken as-is fro; the test, neither `authors` attribute nor `authors_table` were used <br>
+❓ For `isbn`, and since ISBN is divided to ISBN-13 and ISBN-10, i'm saving ISBN-13 to the database in my case (it's not found, we save ISBN-10) but in reality these 2 numbers should be in different columns <br>
+❓ I used Google Books API endpoints without an API key nor an OAUTH2 access via Google Cloud Console. <br>
+❓ For rate limiting, i've set it up to 100 attempts per minute which should be enough for testing. <br>
+
+
+## Room for Improvement
+
+⚠️ Add test cases for all current API endpoints <br>
+⚠️ Add versioning to API endpoints (/v1, /v2 ...) <br>
+⚠️ Finish documenting the remaining of API endpoints <br>
+⚠️ Add indexes in database to speed up read operations <br>
+⚠️ Add caching for frequently accessed books and queries <br>
+⚠️ Better organization of Errors, Exceptions and Responses <br>
+⚠️ For Google Books API, i didn't handle all query parameters (as-per their [documentation](https://developers.google.com/books/docs/v1/using)) <br>
+⚠️ In case I want to add another external books API, need to integrate a strategy pattern for easier switch between these services
+
+---
