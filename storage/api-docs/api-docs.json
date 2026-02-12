@@ -1,0 +1,355 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Book Finder",
+        "description": "Book Finder is an API-based application that allows users login and register in order to search for books, view book details, and manage their favorite books. With the possiblity to import books from external sources like Google Books API",
+        "contact": {
+            "email": "boudissa.ihab@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login users",
+                "description": "Login users by providing an email and password",
+                "operationId": "591f4aca6b2ad2504cfb286af5fe3e3e",
+                "requestBody": {
+                    "description": "In order to login, users need to provide an email and a password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "boudissa.ihab@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Trying to login while already being authenticated"
+                    },
+                    "422": {
+                        "description": "Credentials validation errors"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout user",
+                "description": "Invalidate user's session",
+                "operationId": "31b719d28ebeef38c025490fa70352e8",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Failed to logout. Please try again."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register new users",
+                "description": "Registration allow new users to login and access routes that need an authentication",
+                "operationId": "a9b2580ca7ff308937d40e99c7d72dc7",
+                "requestBody": {
+                    "description": "In order to register, please provide all necessary data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Ihab Boudissa"
+                                    },
+                                    "email": {
+                                        "description": "Email should be unique",
+                                        "type": "string",
+                                        "example": "boudissa.ihab@gmail.com"
+                                    },
+                                    "password": {
+                                        "description": "Password and password confirmation should match",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "Password and password confirmation should match",
+                                        "type": "string",
+                                        "example": "123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Trying to register while already being authenticated"
+                    },
+                    "422": {
+                        "description": "Registration errors"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/books": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get all books",
+                "description": "Get books of current authenticated user",
+                "operationId": "eed41a254d5a2cddb3dfe12ebdb18748",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Books"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Could not get the books list"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/favorites": {
+            "get": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Get user favorite books",
+                "description": "Get list of books added to user favorites",
+                "operationId": "06e29461d9c11f7ed59065f7f65e839f",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Books"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Could not get the user's favorite books"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/favorites/{book_id}": {
+            "post": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Add book to favorites",
+                "description": "Add a book to user favorites",
+                "operationId": "4e07bea3841c3015c278685e4d58539a",
+                "parameters": [
+                    {
+                        "name": "book_id",
+                        "in": "path",
+                        "description": "Book ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Book added to favorites"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Book not found"
+                    },
+                    "409": {
+                        "description": "Book already in your favorites"
+                    },
+                    "500": {
+                        "description": "Could not add the book to your favorites"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Favorites"
+                ],
+                "summary": "Remove book from favorites",
+                "description": "Remove a book from user favorites",
+                "operationId": "a4b20d5f9634d09d7b25c6c91c890dd0",
+                "parameters": [
+                    {
+                        "name": "book_id",
+                        "in": "path",
+                        "description": "Book ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Book removed from your favorites successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Book not in your favorites"
+                    },
+                    "500": {
+                        "description": "Could not remove the book from your favorites"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Books": {
+                "type": "array",
+                "items": {
+                    "properties": {
+                        "title": {
+                            "description": "Get book title",
+                            "type": "string",
+                            "example": "The Great Gatsby"
+                        },
+                        "author": {
+                            "description": "Get book author",
+                            "type": "string",
+                            "example": "F. Scott Fitzgerald"
+                        },
+                        "isbn": {
+                            "description": "Get book ISBN-13 / ISBN-10 (International Standard Book Number)",
+                            "type": "string",
+                            "example": "9780743273565"
+                        },
+                        "cover_url": {
+                            "description": "Get book cover URL",
+                            "type": "string",
+                            "example": "https://covers.openlibrary.org/b/isbn/978-0-7432-7356-5-L.jpg"
+                        }
+                    },
+                    "type": "object"
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Books",
+            "description": "Books"
+        },
+        {
+            "name": "Favorites",
+            "description": "Favorites"
+        }
+    ]
+}
