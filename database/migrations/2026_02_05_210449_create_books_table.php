@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('author');
-            $table->string('isbn')->unique();  // International Standard Book Number
+            $table->string('isbn')->unique()->comment('International Standard Book Number');
             $table->string('cover_url')->nullable();
             $table->timestamps();
         });
