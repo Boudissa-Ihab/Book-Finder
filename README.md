@@ -224,3 +224,17 @@ Book-Finder/
 ⚠️ In case I want to add another external books API, need to integrate a strategy pattern for easier switch between these services
 
 ---
+
+## API Requests
+For API endpoints testing, I personally used Insomnia client (same as Postman)
+
+<img width="2391" height="836" alt="image" src="https://github.com/user-attachments/assets/bab0bdf8-3ada-4ef3-83a4-3625133318a2" />
+
+---
+
+<img width="2385" height="812" alt="image" src="https://github.com/user-attachments/assets/e7e4fd0e-96e2-48e6-ae21-92ae3ea3d04d" />
+
+---
+
+<img width="2503" height="1234" alt="image" src="https://github.com/user-attachments/assets/b4b71ff8-f35e-4ec1-8aa1-8417bdbc1fd4" />
+
