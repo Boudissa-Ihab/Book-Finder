@@ -10,6 +10,7 @@ A REST API built with Laravel 12 that allows searching for books, managing favor
 - [Project Structure](#project-structure)
 - [API Endpoints](#api-endpoints)
 - [Features](#features)
+- [API Requests](#api-requests)
 
 ---
 
@@ -73,7 +74,6 @@ Edit `.env` file and configure the following:
 - `APP_URL`: Application base URL (default: `http://localhost:8000`)
 - update your own `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD`
 - create a database in your DBMS with the same name as your .env `DB_DATABASE`
-- (optiona) personally, i changed `LOG_CHANNEL` to "daily" instead of "stack"
 
 ### 4. Database Setup
 
