@@ -152,7 +152,7 @@ class GoogleApiController extends Controller
             $simplifiedBooks = $this->googleBookService->simplifySearchResults($books);
 
             // Process each book and save them to database (using ISBN as unique ID)
-            $rows = collect($simplifiedBooks['data'])->map(fn ($book) => [
+            $rows = collect($simplifiedBooks)->map(fn ($book) => [
                 'title' => $book['title'],
                 'author' => $book['author'],
                 'isbn' => $book['isbn'],

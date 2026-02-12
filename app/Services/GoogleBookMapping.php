@@ -17,7 +17,8 @@ class GoogleBookMapping
             'title' => $volumeInfo['title'] ?? 'Unknown Title',
             'author' => implode(', ', $volumeInfo['authors'] ?? 'Unknown Author(s)'),
             'isbn' => self::extractIsbn($volumeInfo['industryIdentifiers'] ?? [], 'ISBN_13')
-                    ?? self::extractIsbn($volumeInfo['industryIdentifiers'] ?? [], 'ISBN_10'),
+                    ?? self::extractIsbn($volumeInfo['industryIdentifiers'] ?? [], 'ISBN_10')
+                    ?? self::extractIsbn($volumeInfo['industryIdentifiers'] ?? [], 'OTHER'),
             'cover_url' => $volumeInfo['imageLinks']['thumbnail'] ?? null,
         ];
     }
