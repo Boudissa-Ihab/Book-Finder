@@ -38,7 +38,7 @@ class GoogleBookApiService
             return [];
 
         return collect($books)->map(function ($item) {
-            return GoogleBookMapping::transformGoogleBookDto($item);
+            return GoogleBookDto::transformGoogleBookDto($item)->toArray();
         })->values()->toArray();
     }
 }
