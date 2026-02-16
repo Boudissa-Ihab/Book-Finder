@@ -85,7 +85,14 @@ php artisan migrate
 php artisan db:seed
 ```
 
-### 5. Generate API Documentation
+### 5. Generate Admin
+
+```bash
+# Add default admin
+php artisan generate:admin {email} {name?}
+```
+
+### 6. Generate API Documentation
 
 ```bash
 # Re-generate API documentation
@@ -137,8 +144,7 @@ Book-Finder/
 │   |   └── AppServiceProvider.php       # Defines API rate limit          
 │   ├── Services/
 │   │   ├── GoogleBookApiService.php
-│   │   ├── GoogleBookDto.php            # Data Transfer Object
-│   │   └── GoogleBookMapping.php        # Data mapping logic
+│   │   └── GoogleBookDto.php            # Data Transfer Object
 │   └── Swagger/
 │       └── Book.php             # Book schema definition
 ├── bootstrap/
