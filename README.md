@@ -212,10 +212,10 @@ Book-Finder/
 
 ## Assumptions
 
-❓ `author` attribute was taken as-is fro; the test, neither `authors` attribute nor `authors_table` were used <br>
-❓ For `isbn`, and since ISBN is divided to ISBN-13 and ISBN-10, i'm saving ISBN-13 to the database in my case (it's not found, we save ISBN-10) but in reality these 2 numbers should be in different columns <br>
-❓ I used Google Books API endpoints without an API key nor an OAUTH2 access via Google Cloud Console. <br>
-❓ For rate limiting, i've set it up to 100 attempts per minute which should be enough for testing. <br>
+❓ `author` attribute was used as-per the technical test, another possibility is to add `authors` attribute or `authors_table` to store multiple author records <br>
+❓ For `isbn`, and since ISBN is divided to ISBN-13 and ISBN-10, i'm saving ISBN-13 to the database in my case (if not found, save ISBN-10) but in reality these 2 numbers should be in different columns <br>
+❓ I used Google Books API endpoints without an API key nor an OAUTH2 access via Google Cloud Console, so all default rate limiting by Google API are applied <br>
+❓ For rate limiting from our side of API, i've set it up to 100 attempts per minute which should be enough for testing <br>
 
 
 ## Room for Improvement
@@ -227,7 +227,7 @@ Book-Finder/
 ⚠️ Add caching for frequently accessed books and queries <br>
 ⚠️ Better organization of Errors, Exceptions and Responses <br>
 ⚠️ For Google Books API, i didn't handle all query parameters (as-per their [documentation](https://developers.google.com/books/docs/v1/using)) <br>
-⚠️ In case I want to add another external books API, need to integrate a strategy pattern for easier switch between these services
+⚠️ In case I want to add another external books API, a possibility is to integrate a strategy pattern for easier switch between these services
 
 ---
 
